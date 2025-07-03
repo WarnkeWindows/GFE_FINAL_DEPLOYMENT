@@ -1,0 +1,302 @@
+{
+  "webhooks": {
+    "baseUrl": "https://gfe-backend-837326026335.us-central1.run.app/webhooks",
+    "version": "v1",
+    "timeout": 30000,
+    "retryAttempts": 3,
+    "retryDelay": 2000,
+    
+    "endpoints": {
+      "leadCreated": {
+        "name": "GFE Lead Processing",
+        "path": "/lead-created",
+        "fullUrl": "https://gfe-backend-837326026335.us-central1.run.app/webhooks/lead-created",
+        "events": [
+          "wix.crm.v4.contact_created",
+          "wix.data.v1.item_created"
+        ],
+        "collections": ["GFE_Leads"],
+        "handler": "backend-integration/webhooks/lead-webhook.js",
+        "enabled": true,
+        "description": "Processes new leads and sends notifications"
+      },
+      
+      "quoteRequested": {
+        "name": "GFE Quote Generation",
+        "path": "/quote-requested",
+        "fullUrl": "https://gfe-backend-837326026335.us-central1.run.app/webhooks/quote-requested",
+        "events": [
+          "wix.data.v1.item_created"
+        ],
+        "collections": ["GFE_Quotes"],
+        "handler": "backend-integration/webhooks/quote-webhook.js",
+        "enabled": true,
+        "description": "Generates PDF quotes and sends emails"
+      },
+      
+      "customerRegistered": {
+        "name": "GFE Customer Registration",
+        "path": "/customer-registered",
+        "fullUrl": "https://gfe-backend-837326026335.us-central1.run.app/webhooks/customer-registered",
+        "events": [
+          "wix.members.v1.member_created",
+          "wix.data.v1.item_created"
+        ],
+        "collections": ["GFE_Customers"],
+        "handler": "backend-integration/webhooks/customer-webhook.js",
+        "enabled": true,
+        "description": "Sends welcome emails to new customers"
+      },
+      
+      "appointmentScheduled": {
+        "name": "GFE Appointment Scheduling",
+        "path": "/appointment-scheduled",
+        "fullUrl": "https://gfe-backend-837326026335.us-central1.run.app/webhooks/appointment-scheduled",
+        "events": [
+          "wix.bookings.v2.booking_created",
+          "wix.data.v1.item_created"
+        ],
+        "collections": ["GFE_Appointments"],
+        "handler": "backend-integration/webhooks/appointment-webhook.js",
+        "enabled": true,
+        "description": "Sends appointment confirmations and calendar invites"
+      },
+      
+      "projectUpdated": {
+        "name": "GFE Project Updates",
+        "path": "/project-updated",
+        "fullUrl": "https://gfe-backend-837326026335.us-central1.run.app/webhooks/project-updated",
+        "events": [
+          "wix.data.v1.item_updated"
+        ],
+        "collections": ["GFE_Projects"],
+        "handler": "backend-integration/webhooks/project-webhook.js",
+        "enabled": true,
+        "description": "Notifies customers of project status changes"
+      },
+      
+      "feedbackSubmitted": {
+        "name": "GFE Customer Feedback",
+        "path": "/feedback-submitted",
+        "fullUrl": "https://gfe-backend-837326026335.us-central1.run.app/webhooks/feedback-submitted",
+        "events": [
+          "wix.data.v1.item_created"
+        ],
+        "collections": ["GFE_CustomerFeedback"],
+        "handler": "backend-integration/webhooks/feedback-webhook.js",
+        "enabled": true,
+        "description": "Processes customer feedback and reviews"
+      },
+      
+      "aiEstimationCompleted": {
+        "name": "GFE AI Estimation",
+        "path": "/ai-estimation-completed",
+        "fullUrl": "https://gfe-backend-837326026335.us-central1.run.app/webhooks/ai-estimation-completed",
+        "events": [
+          "wix.data.v1.item_created"
+        ],
+        "collections": ["GFE_AIEstimations"],
+        "handler": "backend-integration/webhooks/ai-estimation-webhook.js",
+        "enabled": true,
+        "description": "Processes AI estimation results and follow-up"
+      }
+    }
+  },
+
+  "globalConfig": {
+    "authentication": {
+      "type": "api_key",
+      "header": "X-API-Key",
+      "secretName": "BACKEND_API_KEY"
+    },
+    
+    "validation": {
+      "validateSignature": true,
+      "signatureHeader": "X-Wix-Signature",
+      "secretKey": "webhook-validation-secret"
+    },
+    
+    "rateLimit": {
+      "enabled": true,
+      "requestsPerMinute": 100,
+      "burstLimit": 20
+    },
+    
+    "errorHandling": {
+      "logErrors": true,
+      "notifyOnFailure": true,
+      "notificationEmail": "tech@goodfaithexteriors.com",
+      "maxRetries": 3,
+      "backoffMultiplier": 2
+    }
+  },
+
+  "eventMappings": {
+    "wix.crm.v4.contact_created": {
+      "description": "New CRM contact created",
+      "triggerConditions": [
+        "contact has email",
+        "contact tagged as 'GFE Lead'"
+      ],
+      "webhooks": ["leadCreated"]
+    },
+    
+    "wix.data.v1.item_created": {
+      "description": "New item created in collections",
+      "triggerConditions": [
+        "collection starts with 'GFE_'"
+      ],
+      "collectionMappings": {
+        "GFE_Leads": ["leadCreated"],
+        "GFE_Quotes": ["quoteRequested"],
+        "GFE_Customers": ["customerRegistered"],
+        "GFE_Appointments": ["appointmentScheduled"],
+        "GFE_CustomerFeedback": ["feedbackSubmitted"],
+        "GFE_AIEstimations": ["aiEstimationCompleted"]
+      }
+    },
+    
+    "wix.data.v1.item_updated": {
+      "description": "Item updated in collections",
+      "triggerConditions": [
+        "status field changed",
+        "important fields modified"
+      ],
+      "collectionMappings": {
+        "GFE_Projects": ["projectUpdated"],
+        "GFE_Quotes": ["quoteRequested"],
+        "GFE_Appointments": ["appointmentScheduled"]
+      }
+    },
+    
+    "wix.bookings.v2.booking_created": {
+      "description": "New booking created",
+      "triggerConditions": [
+        "booking confirmed"
+      ],
+      "webhooks": ["appointmentScheduled"]
+    },
+    
+    "wix.members.v1.member_created": {
+      "description": "New member registered",
+      "triggerConditions": [
+        "member email verified"
+      ],
+      "webhooks": ["customerRegistered"]
+    }
+  },
+
+  "notificationTemplates": {
+    "leadCreated": {
+      "subject": "New Lead: {{leadName}} - {{priority}} Priority",
+      "recipients": [
+        "nick@goodfaithexteriors.com",
+        "rich@goodfaithexteriors.com"
+      ],
+      "template": "lead_notification"
+    },
+    
+    "quoteRequested": {
+      "subject": "Quote Generated: {{quoteId}} for {{customerName}}",
+      "recipients": [
+        "sales@goodfaithexteriors.com"
+      ],
+      "template": "quote_notification"
+    },
+    
+    "appointmentScheduled": {
+      "subject": "Appointment Confirmed: {{appointmentType}} on {{date}}",
+      "recipients": [
+        "{{customerEmail}}",
+        "scheduling@goodfaithexteriors.com"
+      ],
+      "template": "appointment_confirmation"
+    },
+    
+    "projectUpdated": {
+      "subject": "Project Update: {{projectId}} - {{newStatus}}",
+      "recipients": [
+        "{{customerEmail}}"
+      ],
+      "template": "project_update"
+    }
+  },
+
+  "integrations": {
+    "crm": {
+      "enabled": true,
+      "syncToGoogleSheets": true,
+      "spreadsheetId": "1TtughuguQy9TaDOIvgxOEKKjWP2yNeLpiuOWale8qU0",
+      "webhookEndpoint": "https://script.google.com/macros/s/AKfycbzRC8CbcWfyD2c2nn1fWuxz7KKcm6PRcIxIHq9Kf2c6PhFXRKxfbLhr3qbbxdoqzYx-Zg/exec"
+    },
+    
+    "email": {
+      "provider": "sendgrid",
+      "templates": {
+        "lead_notification": "d-1234567890abcdef",
+        "quote_notification": "d-abcdef1234567890",
+        "appointment_confirmation": "d-567890abcdef1234"
+      }
+    },
+    
+    "sms": {
+      "enabled": true,
+      "provider": "twilio",
+      "fromNumber": "+1-555-GFE-WINS"
+    },
+    
+    "analytics": {
+      "trackEvents": true,
+      "googleAnalyticsId": "GA-XXXXXXXXX",
+      "customEvents": [
+        "lead_created",
+        "quote_generated",
+        "appointment_scheduled",
+        "project_completed"
+      ]
+    }
+  },
+
+  "testing": {
+    "webhookTestEndpoint": "https://webhook.site/unique-test-id",
+    "enableTestMode": false,
+    "testWebhooks": [
+      "leadCreated",
+      "quoteRequested"
+    ]
+  },
+
+  "monitoring": {
+    "healthCheck": {
+      "endpoint": "/health",
+      "interval": 300000,
+      "timeout": 10000
+    },
+    
+    "metrics": {
+      "trackDeliverySuccess": true,
+      "trackResponseTimes": true,
+      "trackErrorRates": true
+    },
+    
+    "alerting": {
+      "failureThreshold": 5,
+      "timeWindow": 600000,
+      "alertEmails": [
+        "tech@goodfaithexteriors.com"
+      ]
+    }
+  },
+
+  "security": {
+    "allowedIPs": [
+      "0.0.0.0/0"
+    ],
+    "requireHTTPS": true,
+    "validateContentType": true,
+    "expectedContentType": "application/json"
+  },
+
+  "version": "1.0.0",
+  "lastUpdated": "2025-07-02T00:00:00.000Z"
+}

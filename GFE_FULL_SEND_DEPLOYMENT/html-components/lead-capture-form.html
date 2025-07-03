@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Your Free Quote - Good Faith Exteriors</title>
+    <style>
+        :root {
+            --primary-navy: #1A365D;
+            --primary-navy-light: #2D3748;
+            --secondary-gold: #D4AF37;
+            --secondary-gold-light: #F6E05E;
+            --accent-silver: #C0C0C0;
+            --success-green: #38A169;
+            --error-red: #E53E3E;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-navy-light) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lead-capture-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(26, 54, 93, 0.3);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, var(--secondary-gold) 0%, var(--secondary-gold-light) 100%);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .form-header h1 {
+            color: var(--primary-navy);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header p {
+            color: var(--primary-navy);
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-body {
+            padding: 40px;
+        }
+
+        .form-progress {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .progress-step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-silver);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: 600;
+            color: white;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: var(--secondary-gold);
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed {
+            background: var(--success-green);
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 2px;
+            background: var(--accent-silver);
+            z-index: -1;
+        }
+
+        .progress-step:last-child::after {
+            display: none;
+        }
+
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-navy);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-gold);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--error-red);
+            background: #fef2f2;
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .project-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .project-type-option {
+            padding: 20px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .project-type-option:hover {
+            border-color: var(--secondary-gold);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .project-type-option.selected {
+            border-color: var(--secondary-gold);
+            background: var(--secondary-gold);
+            color: white;
+        }
+
+        .project-type-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-gold) 0%, var(--secondary-gold-light) 100%);
+            color: var(--primary-navy);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-navy);
+            border: 2px solid var(--accent-silver);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-navy);
+            background: var(--primary-navy);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .estimate-display {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-navy-light) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .estimate-amount {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary-gold);
+            margin-bottom: 10px;
+        }
+
+        .estimate-details {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .form-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-header p {
+                font-size: 1rem;
+            }
+
+            .form-body {
+                padding: 20px;
+            }
+
+            .project-type-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lead-capture-container">
+        <div class="form-header">
+            <h1>🏠 Free Quote</h1>
+            <p>Get your personalized window estimate in under 2 minutes</p>
+        </div>
+
+        <div class="form-body">
+            <!-- Progress Indicator -->
+            <div class="form-progress">
+                <div class="progress-step active" id="step-1">1</div>
+                <div class="progress-step" id="step-2">2</div>
+                <div class="progress-step" id="step-3">3</div>
+                <div class="progress-step" id="step-4">4</div>
+            </div>
+
+            <form id="leadCaptureForm">
+                <!-- Step 1: Project Type -->
+                <div class="form-step active" id="step1">
+                    <div class="form-group">
+                        <label>What type of project are you planning?</label>
+                        <div class="project-type-grid">
+                            <div class="project-type-option" data-value="Window Replacement">
+                                <div class="project-type-icon">🪟</div>
+                                <div>Window Replacement</div>
+                            </div>
+                            <div class="project-type-option" data-value="New Construction">
+                                <div class="project-type-icon">🏗️</div>
+                                <div>New Construction</div>
+                            </div>
+                            <div class="project-type-option" data-value="Door Installation">
+                                <div class="project-type-icon">🚪</div>
+                                <div>Door Installation</div>
+                            </div>
+                            <div class="project-type-option" data-value="Repair/Maintenance">
+                                <div class="project-type-icon">🔧</div>
+                                <div>Repair/Maintenance</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="projectType" name="projectType" required>
+                        <div class="error-message" id="projectTypeError">Please select a project type</div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Contact Information -->
+                <div class="form-step" id="step2">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" class="form-control" required 
+                               placeholder="Enter your full name">
+                        <div class="error-message" id="fullNameError">Please enter your full name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" class="form-control" required 
+                               placeholder="Enter your email address">
+                        <div class="error-message" id="emailError">Please enter a valid email address</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" 
+                               placeholder="Enter your phone number">
+                        <div class="error-message" id="phoneError">Please enter a valid phone number</div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Project Details -->
+                <div class="form-step" id="step3">
+                    <div class="form-group">
+                        <label for="customerAddress">Project Address</label>
+                        <input type="text" id="customerAddress" name="customerAddress" class="form-control" 
+                               placeholder="Enter the project address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estimatedProjectValue">Estimated Project Budget</label>
+                        <select id="estimatedProjectValue" name="estimatedProjectValue" class="form-control">
+                            <option value="">Select budget range</option>
+                            <option value="5000">$2,000 - $5,000</option>
+                            <option value="10000">$5,000 - $10,000</option>
+                            <option value="20000">$10,000 - $20,000</option>
+                            <option value="50000">$20,000 - $50,000</option>
+                            <option value="100000">$50,000+</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Additional Details</label>
+                        <textarea id="notes" name="notes" class="form-control" rows="4" 
+                                  placeholder="Tell us more about your project..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="marketingOptIn" name="marketingOptIn" value="true">
+                            I'd like to receive updates and promotions from Good Faith Exteriors
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Step 4: Confirmation -->
+                <div class="form-step" id="step4">
+                    <div class="estimate-display" id="estimateDisplay" style="display: none;">
+                        <div class="estimate-amount" id="estimateAmount">$8,500 - $12,000</div>
+                        <div class="estimate-details">Estimated range for your window replacement project</div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <h3>Ready to get your free detailed quote?</h3>
+                        <p>Our team will review your information and contact you within 24 hours with a personalized quote and next steps.</p>
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">
+                        ← Previous
+                    </button>
+                    <button type="button" class="btn btn-primary" id="nextBtn">
+                        Next →
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">
+                        <span class="loading-spinner" id="loadingSpinner" style="display: none;"></span>
+                        Submit Request
+                    </button>
+                </div>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">✓</div>
+                <h2>Request Submitted Successfully!</h2>
+                <p>Thank you for choosing Good Faith Exteriors. Our team will contact you within 24 hours to discuss your project and schedule a consultation.</p>
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="resetForm()">Submit Another Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class LeadCaptureForm {
+            constructor() {
+                this.currentStep = 1;
+                this.totalSteps = 4;
+                this.formData = {};
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateStepDisplay();
+            }
+
+            bindEvents() {
+                // Navigation buttons
+                document.getElementById('nextBtn').addEventListener('click', () => this.nextStep());
+                document.getElementById('prevBtn').addEventListener('click', () => this.prevStep());
+                document.getElementById('submitBtn').addEventListener('click', (e) => this.submitForm(e));
+
+                // Project type selection
+                document.querySelectorAll('.project-type-option').forEach(option => {
+                    option.addEventListener('click', () => this.selectProjectType(option));
+                });
+
+                // Form validation
+                this.addValidationListeners();
+            }
+
+            addValidationListeners() {
+                const inputs = ['fullName', 'email', 'phone'];
+                inputs.forEach(inputId => {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.addEventListener('blur', () => this.validateField(inputId));
+                        input.addEventListener('input', () => this.clearError(inputId));
+                    }
+                });
+            }
+
+            selectProjectType(option) {
+                // Clear previous selection
+                document.querySelectorAll('.project-type-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+
+                // Select new option
+                option.classList.add('selected');
+                document.getElementById('projectType').value = option.dataset.value;
+                this.clearError('projectType');
+
+                // Auto-advance after selection
+                setTimeout(() => {
+                    this.nextStep();
+                }, 500);
+            }
+
+            validateField(fieldId) {
+                const field = document.getElementById(fieldId);
+                const errorElement = document.getElementById(fieldId + 'Error');
+                let isValid = true;
+                let errorMessage = '';
+
+                switch (fieldId) {
+                    case 'fullName':
+                        if (!field.value.trim() || field.value.trim().length < 2) {
+                            errorMessage = 'Please enter your full name (at least 2 characters)';
+                            isValid = false;
+                        }
+                        break;
+
+                    case 'email':
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!field.value.trim()) {
+                            errorMessage = 'Please enter your email address';
+                            isValid = false;
+                        } else if (!emailRegex.test(field.value)) {
+                            errorMessage = 'Please enter a valid email address';
+                            isValid = false;
+                        }
+                        break;
+
+                    case 'phone':
+                        if (field.value.trim()) {
+                            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+                            const cleanPhone = field.value.replace(/[\s\-\(\)]/g, '');
+                            if (!phoneRegex.test(cleanPhone)) {
+                                errorMessage = 'Please enter a valid phone number';
+                                isValid = false;
+                            }
+                        }
+                        break;
+
+                    case 'projectType':
+                        if (!field.value) {
+                            errorMessage = 'Please select a project type';
+                            isValid = false;
+                        }
+                        break;
+                }
+
+                if (!isValid) {
+                    field.classList.add('error');
+                    errorElement.textContent = errorMessage;
+                    errorElement.style.display = 'block';
+                } else {
+                    field.classList.remove('error');
+                    errorElement.style.display = 'none';
+                }
+
+                return isValid;
+            }
+
+            clearError(fieldId) {
+                const field = document.getElementById(fieldId);
+                const errorElement = document.getElementById(fieldId + 'Error');
+                
+                field.classList.remove('error');
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+
+            validateCurrentStep() {
+                let isValid = true;
+
+                switch (this.currentStep) {
+                    case 1:
+                        isValid = this.validateField('projectType');
+                        break;
+
+                    case 2:
+                        isValid = this.validateField('fullName') && this.validateField('email');
+                        if (document.getElementById('phone').value.trim()) {
+                            isValid = isValid && this.validateField('phone');
+                        }
+                        break;
+
+                    case 3:
+                        // Optional fields, no validation required
+                        break;
+
+                    case 4:
+                        // Review step, no additional validation
+                        break;
+                }
+
+                return isValid;
+            }
+
+            nextStep() {
+                if (!this.validateCurrentStep()) {
+                    return;
+                }
+
+                if (this.currentStep < this.totalSteps) {
+                    this.currentStep++;
+                    this.updateStepDisplay();
+
+                    // Show estimate on final step
+                    if (this.currentStep === 4) {
+                        this.showEstimate();
+                    }
+                }
+            }
+
+            prevStep() {
+                if (this.currentStep > 1) {
+                    this.currentStep--;
+                    this.updateStepDisplay();
+                }
+            }
+
+            updateStepDisplay() {
+                // Update progress indicators
+                for (let i = 1; i <= this.totalSteps; i++) {
+                    const step = document.getElementById(`step-${i}`);
+                    const stepElement = document.getElementById(`step${i}`);
+
+                    if (i < this.currentStep) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (i === this.currentStep) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+
+                    // Show/hide step content
+                    if (stepElement) {
+                        stepElement.classList.toggle('active', i === this.currentStep);
+                    }
+                }
+
+                // Update buttons
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                const submitBtn = document.getElementById('submitBtn');
+
+                prevBtn.style.display = this.currentStep > 1 ? 'inline-flex' : 'none';
+                nextBtn.style.display = this.currentStep < this.totalSteps ? 'inline-flex' : 'none';
+                submitBtn.style.display = this.currentStep === this.totalSteps ? 'inline-flex' : 'none';
+            }
+
+            showEstimate() {
+                const projectType = document.getElementById('projectType').value;
+                const estimatedValue = parseInt(document.getElementById('estimatedProjectValue').value) || 10000;
+                
+                let estimateRange = '';
+                
+                // Generate estimate based on project type and budget
+                switch (projectType) {
+                    case 'Window Replacement':
+                        estimateRange = this.calculateWindowEstimate(estimatedValue);
+                        break;
+                    case 'New Construction':
+                        estimateRange = this.calculateNewConstructionEstimate(estimatedValue);
+                        break;
+                    case 'Door Installation':
+                        estimateRange = this.calculateDoorEstimate(estimatedValue);
+                        break;
+                    default:
+                        estimateRange = '$2,000 - $15,000';
+                }
+
+                document.getElementById('estimateAmount').textContent = estimateRange;
+                document.getElementById('estimateDisplay').style.display = 'block';
+            }
+
+            calculateWindowEstimate(budget) {
+                const min = Math.max(2000, budget * 0.8);
+                const max = Math.max(5000, budget * 1.2);
+                return `$${min.toLocaleString()} - $${max.toLocaleString()}`;
+            }
+
+            calculateNewConstructionEstimate(budget) {
+                const min = Math.max(5000, budget * 0.9);
+                const max = Math.max(10000, budget * 1.3);
+                return `$${min.toLocaleString()} - $${max.toLocaleString()}`;
+            }
+
+            calculateDoorEstimate(budget) {
+                const min = Math.max(800, budget * 0.7);
+                const max = Math.max(3000, budget * 1.1);
+                return `$${min.toLocaleString()} - $${max.toLocaleString()}`;
+            }
+
+            async submitForm(e) {
+                e.preventDefault();
+
+                if (!this.validateCurrentStep()) {
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submitBtn');
+                const spinner = document.getElementById('loadingSpinner');
+
+                // Disable submit button and show loading
+                submitBtn.disabled = true;
+                spinner.style.display = 'inline-block';
+
+                try {
+                    // Collect form data
+                    const formData = new FormData(document.getElementById('leadCaptureForm'));
+                    const leadData = Object.fromEntries(formData.entries());
+
+                    // Add additional data
+                    leadData.source = 'Website';
+                    leadData.sessionId = this.generateSessionId();
+                    leadData.utmParams = this.getUtmParams();
+                    leadData.estimatedProjectValue = parseInt(leadData.estimatedProjectValue) || null;
+                    leadData.marketingOptIn = leadData.marketingOptIn === 'true';
+
+                    // Submit to API
+                    const response = await fetch('/api/leads', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(leadData)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        this.showSuccessMessage();
+                        
+                        // Track conversion event
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'conversion', {
+                                'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL',
+                                'value': leadData.estimatedProjectValue || 0,
+                                'currency': 'USD'
+                            });
+                        }
+                    } else {
+                        this.showErrorMessage(result.error || 'Failed to submit request');
+                    }
+
+                } catch (error) {
+                    console.error('Submission error:', error);
+                    this.showErrorMessage('Network error. Please try again.');
+                } finally {
+                    // Re-enable submit button and hide loading
+                    submitBtn.disabled = false;
+                    spinner.style.display = 'none';
+                }
+            }
+
+            showSuccessMessage() {
+                document.querySelector('.form-body form').style.display = 'none';
+                document.querySelector('.form-progress').style.display = 'none';
+                document.getElementById('successMessage').classList.add('show');
+            }
+
+            showErrorMessage(message) {
+                alert(`Error: ${message}\n\nPlease try again or contact us directly at info@goodfaithexteriors.com`);
+            }
+
+            generateSessionId() {
+                return 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            getUtmParams() {
+                const params = new URLSearchParams(window.location.search);
+                return {
+                    utm_source: params.get('utm_source'),
+                    utm_medium: params.get('utm_medium'),
+                    utm_campaign: params.get('utm_campaign'),
+                    utm_content: params.get('utm_content'),
+                    utm_term: params.get('utm_term')
+                };
+            }
+        }
+
+        // Global function to reset form
+        function resetForm() {
+            location.reload();
+        }
+
+        // Initialize form when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new LeadCaptureForm();
+        });
+
+        // Add some nice hover effects and animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add floating animation to header
+            const header = document.querySelector('.form-header');
+            let mouseX = 0, mouseY = 0;
+            
+            header.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX / window.innerWidth;
+                mouseY = e.clientY / window.innerHeight;
+                
+                header.style.transform = `perspective(1000px) rotateX(${mouseY * 5 - 2.5}deg) rotateY(${mouseX * 5 - 2.5}deg)`;
+            });
+            
+            header.addEventListener('mouseleave', () => {
+                header.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

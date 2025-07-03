@@ -1,0 +1,284 @@
+{
+  "name": "Good Faith Exteriors Main Site",
+  "version": "1.0.0",
+  "description": "Premium Windows & Doors Installation with AI-Powered Estimation",
+  "type": "wix-site",
+  
+  "wix": {
+    "siteId": "5ec64f41-3f5e-4ba1-b9fc-018d3a8681a4",
+    "metaSiteId": "5ec64f41-3f5e-4ba1-b9fc-018d3a8681a4",
+    "accountId": "10d52dd8-ec9b-4453-adbc-6293b99af499",
+    "environment": "production",
+    "region": "us"
+  },
+
+  "project": {
+    "name": "goodfaithexteriors-app",
+    "domain": "goodfaithexteriors.com",
+    "editorUrl": "https://editor.wix.com/html/editor/web/renderer/edit/b8574bad-dbbc-46a3-8d76-941a7101e5ac?metaSiteId=5ec64f41-3f5e-4ba1-b9fc-018d3a8681a4",
+    "namespace": "@goodfaithexteriors/grid-flow-engine"
+  },
+
+  "oauth": {
+    "clientId": "b32df066-e276-4d06-b9ee-18187d7b1439",
+    "appId": "477baa33-872c-4b41-8f1f-7d5e28a684f2",
+    "appSecret": "c8b358bd-e1e1-437c-a8f5-a2f0fd6399a1",
+    "redirectUris": [
+      "https://goodfaithexteriors.com/_oauth/callback",
+      "https://www.goodfaithexteriors.com/_oauth/callback",
+      "https://gfe-backend-837326026335.us-central1.run.app/auth/callback"
+    ],
+    "scopes": [
+      "wix.data.read",
+      "wix.data.write",
+      "wix.stores.read",
+      "wix.stores.write",
+      "wix.bookings.read",
+      "wix.bookings.write",
+      "wix.crm.read",
+      "wix.crm.write",
+      "wix.members.read",
+      "wix.members.write",
+      "wix.site.read"
+    ]
+  },
+
+  "backend": {
+    "url": "https://gfe-backend-837326026335.us-central1.run.app",
+    "timeout": 30000,
+    "retryAttempts": 3,
+    "apiVersion": "v1"
+  },
+
+  "collections": {
+    "prefix": "GFE_",
+    "names": [
+      "Leads",
+      "WindowProducts", 
+      "Quotes",
+      "Customers",
+      "Projects",
+      "Appointments",
+      "CustomerFeedback",
+      "Analytics",
+      "AIEstimations"
+    ],
+    "permissions": {
+      "GFE_Leads": {
+        "read": "admin",
+        "write": "admin",
+        "remove": "admin"
+      },
+      "GFE_WindowProducts": {
+        "read": "anyone",
+        "write": "admin",
+        "remove": "admin"
+      },
+      "GFE_Quotes": {
+        "read": "site-members",
+        "write": "admin",
+        "remove": "admin"
+      },
+      "GFE_Customers": {
+        "read": "admin",
+        "write": "admin",
+        "remove": "admin"
+      },
+      "GFE_Projects": {
+        "read": "site-members",
+        "write": "admin",
+        "remove": "admin"
+      },
+      "GFE_Appointments": {
+        "read": "site-members",
+        "write": "site-members",
+        "remove": "admin"
+      },
+      "GFE_CustomerFeedback": {
+        "read": "anyone",
+        "write": "site-members",
+        "remove": "admin"
+      },
+      "GFE_Analytics": {
+        "read": "admin",
+        "write": "anyone",
+        "remove": "admin"
+      },
+      "GFE_AIEstimations": {
+        "read": "admin",
+        "write": "anyone",
+        "remove": "admin"
+      }
+    }
+  },
+
+  "widgets": {
+    "aiEstimator": {
+      "id": "ai-window-estimator",
+      "title": "AI Window Estimator",
+      "description": "Upload a photo and get instant window quotes",
+      "path": "widgets/interactive-components/ai-window-estimator-widget.html",
+      "height": 800,
+      "width": "100%",
+      "responsive": true
+    },
+    "productCatalog": {
+      "id": "window-products-widget",
+      "title": "Window Products Catalog",
+      "description": "Browse and filter window products",
+      "path": "widgets/interactive-components/window-products-widget.html",
+      "height": 700,
+      "width": "100%",
+      "responsive": true
+    },
+    "customerPortal": {
+      "id": "customer-portal-widget",
+      "title": "Customer Portal",
+      "description": "Customer self-service dashboard",
+      "path": "widgets/interactive-components/customer-portal-widget.html",
+      "height": 600,
+      "width": "100%",
+      "responsive": true
+    }
+  },
+
+  "assets": {
+    "baseUrl": "https://static.wixstatic.com/media",
+    "logos": {
+      "main": "10d52d_651a76065cb8426294f04e1b7483a3a2~mv2.png",
+      "square": "10d52d_91ba6fdf18634b31b4ebedf5f0f7f8d3~mv2.png",
+      "withBrands": "10d52d_6d032bfecefb4df69e68bf7dc26fbd92~mv2.png",
+      "estimator": "10d52d_d988707487cd498ab95e653e09f5ca4a~mv2.png",
+      "aiMeasure": "10d52d_1f0bc35da9f64cfaaf3e7bdd0e19e46d~mv2.png"
+    },
+    "brands": {
+      "andersen": "10d52d_19c62f7d131445829ff8fdde2b581b98~mv2.jpeg",
+      "marvin": "10d52d_7df98cb648bb485d8e2f0922a3da18f4~mv2.jpeg",
+      "pella": "10d52d_739b01217f084e21a41dd8591b98e6b8~mv2.jpeg",
+      "provia": "10d52d_bcbbb5675e7b496891f63cb64e37fa07~mv2.png",
+      "windsor": "10d52d_da963919e25c46c9bd735ee4bbce0da9~mv2.jpeg",
+      "thermoTech": "10d52d_a333c0355ff14c6cb0ac68755b29b1f3~mv2.jpeg"
+    },
+    "windowTypes": {
+      "awning": "10d52d_35742c77270640e7bce240ef7280568c~mv2.png",
+      "casement": "10d52d_79a4cd4776a94ba2a958989178a6ee7f~mv2.png",
+      "bay": "10d52d_27545cce879743aeb6e85256d4837f97~mv2.png",
+      "slider": "10d52d_d4baffa175394b2c88b4f75dfd833eeb~mv2.png",
+      "singleHung": "10d52d_b7c5f1d8d75d4eb7b3d5e049a012527d~mv2.png",
+      "doubleHung": "10d52d_b8bfb21fc4d6460ebce21673473667f5~mv2.png",
+      "picture": "10d52d_12cbfe1efc744559b497c3acbf43fe8f~mv2.png",
+      "entryDoor": "10d52d_bcaf2da6be774a72a562e3dc7527ec90~mv2.png"
+    },
+    "backgrounds": {
+      "luxuryLivingRoom": "10d52d_a59424b9d5314e54886b4ba6f091075f~mv2.png",
+      "homePage": "10d52d_8658ee3d06944967b7897cc2aa1e32de~mv2.png",
+      "section": "10d52d_5eeff8c1bc7048f494c375abde3aae32~mv2.png",
+      "onlineEstimator": "10d52d_f1b3cb2574fd4f228b23f7a4bdd41d3a~mv2.png"
+    }
+  },
+
+  "googleCloud": {
+    "projectId": "good-faith-exteriors",
+    "projectNumber": "837326026335",
+    "region": "us-central1",
+    "serviceAccount": "837326026335-compute@developer.gserviceaccount.com",
+    "apiKey": "AIzaSyAhW8xfvCJdICXKYEMqYidCWP2IhUnSaVY",
+    "organizationId": "518845478181"
+  },
+
+  "email": {
+    "fromAddress": "noreply@goodfaithexteriors.com",
+    "replyToAddress": "info@goodfaithexteriors.com",
+    "supportEmail": "support@goodfaithexteriors.com",
+    "templates": {
+      "leadNotification": "lead-notification",
+      "quoteGenerated": "quote-generated",
+      "appointmentConfirmation": "appointment-confirmation",
+      "welcomeCustomer": "welcome-customer",
+      "quoteAccepted": "quote-accepted"
+    }
+  },
+
+  "contacts": {
+    "owners": {
+      "nick": {
+        "name": "Nick Warnke",
+        "email": "nick@goodfaithexteriors.com",
+        "role": "Co-Owner"
+      },
+      "rich": {
+        "name": "Rich Farchione", 
+        "email": "rich@goodfaithexteriors.com",
+        "role": "Co-Owner"
+      }
+    }
+  },
+
+  "features": {
+    "aiEstimation": true,
+    "instantQuotes": true,
+    "customerPortal": true,
+    "appointmentScheduling": true,
+    "emailNotifications": true,
+    "smsNotifications": true,
+    "webhooks": true,
+    "oauth": true,
+    "analytics": true,
+    "pdfGeneration": true
+  },
+
+  "cors": {
+    "allowedOrigins": [
+      "https://goodfaithexteriors.com",
+      "https://www.goodfaithexteriors.com",
+      "https://editor.wix.com",
+      "https://preview.wix.com",
+      "https://gfe-backend-837326026335.us-central1.run.app"
+    ],
+    "allowedMethods": [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE",
+      "OPTIONS"
+    ],
+    "allowedHeaders": [
+      "Content-Type",
+      "Authorization",
+      "X-Wix-Signature",
+      "X-API-Key"
+    ]
+  },
+
+  "monitoring": {
+    "enableLogging": true,
+    "logLevel": "info",
+    "enableMetrics": true,
+    "enableErrorReporting": true
+  },
+
+  "security": {
+    "rateLimiting": {
+      "enabled": true,
+      "requestsPerMinute": 1000
+    },
+    "inputValidation": true,
+    "outputSanitization": true
+  },
+
+  "deployment": {
+    "environments": {
+      "development": {
+        "url": "https://preview.wix.com",
+        "debug": true
+      },
+      "production": {
+        "url": "https://goodfaithexteriors.com",
+        "debug": false
+      }
+    }
+  },
+
+  "version": "1.0.0",
+  "lastUpdated": "2025-07-02T00:00:00.000Z"
+}
